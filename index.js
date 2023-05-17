@@ -40,18 +40,34 @@ async function run() {
       const result = await serviceCollection.findOne(query)
       res.send(result)
     })
-    //booking selected info...  POST data
-    app.post('/bookings',async(req,res)=>{
+    //POST all booking selected info...
+    app.post("/bookings", async (req, res) => {
       const bookingInfo = req.body
-      console.log(bookingInfo); 
+      console.log(bookingInfo)
       const result = await bookingCollection.insertOne(bookingInfo)
       res.send(result)
-
     })
+    //get all booking data throw email
+    app.get("/bookings/:email", async (req, res) => {
+      const email = req.params.email
+      const query = {email:email}
+      const bookings = await bookingCollection.find(query).toArray()
+      res.send(bookings)
+    })
+    //delete bookings data by user==
+    app.delete('/bookings/:id',async (req,res)=>{
+      const id = req.params.id 
+      const query = {_id:new ObjectId(id)}
+      const result = await bookingCollection.deleteOne(query)
+      res.send(result)
+    })
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 })
-    console.log("Pinged your deployment. You successfully connected to MongoDB!")
+    console.log(
+      "Pinged your deployment. You successfully connected to MongoDB!"
+    )
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
