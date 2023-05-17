@@ -5,6 +5,8 @@ const port = 5000
 const app = express()
 app.use(cors())
 app.use(express.json())
+
+//!data base information===============
 //tanzimnahid6
 //N1y1Tfa4ibZMWgTf
 
@@ -50,18 +52,17 @@ async function run() {
     //get all booking data throw email
     app.get("/bookings/:email", async (req, res) => {
       const email = req.params.email
-      const query = {email:email}
+      const query = { email: email }
       const bookings = await bookingCollection.find(query).toArray()
       res.send(bookings)
     })
     //delete bookings data by user==
-    app.delete('/bookings/:id',async (req,res)=>{
-      const id = req.params.id 
-      const query = {_id:new ObjectId(id)}
+    app.delete("/bookings/:id", async (req, res) => {
+      const id = req.params.id
+      const query = { _id: new ObjectId(id) }
       const result = await bookingCollection.deleteOne(query)
       res.send(result)
     })
-
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 })
